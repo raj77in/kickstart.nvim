@@ -242,8 +242,8 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.wo.number = true
 
--- Enable mouse mode
-vim.o.mouse = 'a'
+-- Enable/Disable mouse mode
+vim.o.mouse = ''
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -601,6 +601,16 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- colorscheme
+colormenu_path = vim.fn.expand('$HOME/.config/nvim/lua/util/colorspicker.lua')
+vim.keymap.set("n", "<leader>cs", function()
+ vim.cmd("luafile " .. colormenu_path)
+end)
+
+-- require('util.colorspicker')
+-- vim.keymap.set("", "<leader>cs", '<cmd>lua colorspicker(require("telescope.themes").get_dropdown({}))<CR>', { noremap = true, silent = false })
+--
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

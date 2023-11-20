@@ -69,6 +69,22 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
+  'raj77in/vim_colorschemes',
+
+  -- Paste image from clipboard
+  'dfendr/clipboard-image.nvim',
+  -- You can create configuration for ceartain filetype by creating another field (markdown, in this case)
+  -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`
+  -- Missing options from `markdown` field will be replaced by options from `default` field
+  -- markdown = {
+    -- img_dir = {"src", "assets", "img"}, -- Use table for nested dir (New feature form PR #20)
+    -- img_dir_txt = "/assets/img",
+    -- img_handler = function(img) -- New feature from PR #22
+      -- local script = string.format('./image_compressor.sh "%s"', img.path)
+      -- os.execute(script)
+    -- end,
+  -- }
+
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -231,6 +247,24 @@ require('lazy').setup({
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
+
+  require ('clipboard-image').setup {
+
+  -- Default configuration for all filetype
+  default = {
+    -- img_dir = {'%:t:r',"images"} ,
+    img_name = function() return os.date('%Y-%m-%d-%H-%M-%S') end, -- Example result: "2021-04-13-10-04-18"
+    img_dir_txt = function()
+      return {"img",vim.fn.expand("%:t:r")}
+    end,
+    img_dir = function()
+      return {"img",vim.fn.expand("%:t:r")}
+    end,
+    affix = "![](%s)",
+
+    -- affix = "<\n  %s\n>" -- Multi lines affix
+  },
+}
 
 -- [[ Setting options ]]
 -- See `:help vim.o`

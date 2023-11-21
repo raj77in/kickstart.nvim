@@ -255,7 +255,7 @@ require('lazy').setup({
     -- img_dir = {'%:t:r',"images"} ,
     img_name = function() return os.date('%Y-%m-%d-%H-%M-%S') end, -- Example result: "2021-04-13-10-04-18"
     img_dir_txt = function()
-      return {"img",vim.fn.expand("%:t:r")}
+      return {"image",vim.fn.expand("%:t:r")}
     end,
     img_dir = function()
       return {"img",vim.fn.expand("%:t:r")}
@@ -265,6 +265,7 @@ require('lazy').setup({
     -- affix = "<\n  %s\n>" -- Multi lines affix
   },
 }
+vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<cmd>PasteImg<CR>')
 
 -- [[ Setting options ]]
 -- See `:help vim.o`

@@ -7,13 +7,13 @@
 Kickstart.nvim is *not* a distribution.
 
 Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
+The goal is that you can read every line of code, top-to-bottom, understand
+what your configuration is doing, and modify it to suit your needs.
 
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
+Once you've done that, you should start exploring, configuring and tinkering to
+explore Neovim!
 
-  If you don't know anything about Lua, I recommend taking some time to read through
+If you don't know anything about Lua, I recommend taking some time to read through
   a guide. One possible example:
   - https://learnxinyminutes.com/docs/lua/
 
@@ -22,21 +22,21 @@ Kickstart.nvim is a template for your own configuration.
   - https://neovim.io/doc/user/lua-guide.html
 
 
-Kickstart Guide:
+  Kickstart Guide:
 
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
+  I have left several `:help X` comments throughout the init.lua
+  You should run that command and read that help section for more information.
 
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
+  In addition, I have some `NOTE:` items throughout the file.
+  These are for you, the reader to help understand what is happening. Feel free to delete
+  them once you know what you're doing, but they should serve as a guide for when you
+  are first encountering a few different constructs in your nvim config.
 
-I hope you enjoy your Neovim journey,
-- TJ
+  I hope you enjoy your Neovim journey,
+  - TJ
 
-P.S. You can delete this when you're done too. It's your config now :)
---]]
+  P.S. You can delete this when you're done too. It's your config now :)
+  --]]
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -72,18 +72,63 @@ require('lazy').setup({
   'raj77in/vim_colorschemes',
 
   -- Paste image from clipboard
-  'dfendr/clipboard-image.nvim',
-  -- You can create configuration for ceartain filetype by creating another field (markdown, in this case)
-  -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`
-  -- Missing options from `markdown` field will be replaced by options from `default` field
-  -- markdown = {
-    -- img_dir = {"src", "assets", "img"}, -- Use table for nested dir (New feature form PR #20)
-    -- img_dir_txt = "/assets/img",
-    -- img_handler = function(img) -- New feature from PR #22
-      -- local script = string.format('./image_compressor.sh "%s"', img.path)
-      -- os.execute(script)
-    -- end,
-  -- }
+  {
+    'dfendr/clipboard-image.nvim',
+    ft = { "markdown" },
+    setup = {
+
+      -- Default configuration for all filetype
+      default = {
+        -- img_dir = {'%:t:r',"images"} ,
+        img_name = function() return os.date('%Y-%m-%d-%H-%M-%S') end, -- Example result: "2021-04-13-10-04-18"
+        img_dir_txt = function()
+          return {"image",vim.fn.expand("%:t:r")}
+        end,
+        img_dir = function()
+          return {"image",vim.fn.expand("%:t:r")}
+        end,
+        affix = "![](%s)",
+
+        -- affix = "<\n  %s\n>" -- Multi lines affix
+      },
+    }
+  },
+  -- Markdown preview
+  --
+  -- install without yarn or npm
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+  },
+
+  -- File browser
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons"
+    },
+    setup = {
+      extensions = {
+        file_browser = {
+          theme = "ivy",
+          -- disables netrw and use telescope-file-browser in its place
+          hijack_netrw = true,
+          mappings = {
+            ["i"] = {
+              -- your custom insert mode mappings
+            },
+            ["n"] = {
+              -- your custom normal mode mappings
+            },
+          },
+        },
+      },
+    }
+  },
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -229,7 +274,60 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
+      'ikatyang/tree-sitter-markdown',
     },
+    setup = {
+      -- A list of parser names, or "all" (the five listed parsers should always be installed)
+      -- Check the list athttps://github.com/nvim-treesitter/nvim-treesitter
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown_inline", "python", "bash",  "csv", "diff", "dockerfile", "make", "rst"},
+
+      -- Install parsers synchronously (only applied to `ensure_installed`)
+      sync_install = false,
+
+      -- Automatically install missing parsers when entering buffer
+      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+      auto_install = true,
+
+      -- List of parsers to ignore installing (or "all")
+      ignore_install = { "javascript" },
+
+      -- Indentation
+      indent = {
+        enable = true
+      },
+
+      --Tree-sitter based folding. (Technically not a module because it's per windows and not per buffer.)
+
+
+
+      ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+      -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+      highlight = {
+        enable = true,
+
+        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+        -- the name of the parser)
+        -- list of language that will be disabled
+        -- disable = { "c", "rust" },
+        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+        disable = function(lang, buf)
+          local max_filesize = 100 * 1024 -- 100 KB
+          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+        end,
+        --
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false
+      },
+    },
+
     build = ':TSUpdate',
   },
 
@@ -248,23 +346,7 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
-  require ('clipboard-image').setup {
 
-  -- Default configuration for all filetype
-  default = {
-    -- img_dir = {'%:t:r',"images"} ,
-    img_name = function() return os.date('%Y-%m-%d-%H-%M-%S') end, -- Example result: "2021-04-13-10-04-18"
-    img_dir_txt = function()
-      return {"image",vim.fn.expand("%:t:r")}
-    end,
-    img_dir = function()
-      return {"img",vim.fn.expand("%:t:r")}
-    end,
-    affix = "![](%s)",
-
-    -- affix = "<\n  %s\n>" -- Multi lines affix
-  },
-}
 vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<cmd>PasteImg<CR>')
 
 -- [[ Setting options ]]
@@ -272,7 +354,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<cmd>PasteImg<CR>')
 -- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -307,6 +389,9 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+-- For filename completion
+vim.o.wildmode = 'longest:full,full'
 
 -- [[ Basic Keymaps ]]
 
@@ -640,12 +725,31 @@ cmp.setup {
 -- colorscheme
 colormenu_path = vim.fn.expand('$HOME/.config/nvim/lua/util/colorspicker.lua')
 vim.keymap.set("n", "<leader>cs", function()
- vim.cmd("luafile " .. colormenu_path)
+  vim.cmd("luafile " .. colormenu_path)
 end)
 
 -- require('util.colorspicker')
 -- vim.keymap.set("", "<leader>cs", '<cmd>lua colorspicker(require("telescope.themes").get_dropdown({}))<CR>', { noremap = true, silent = false })
 --
+-- For  file browser
+-- To get telescope-file-browser loaded and working with telescope,
+-- you need to call load_extension, somewhere after setup function:
+require("telescope").load_extension "file_browser"
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<space>fb",
+  ":Telescope file_browser<CR>",
+  { noremap = true }
+)
+
+-- open file_browser with the path of the current buffer
+vim.api.nvim_set_keymap(
+  "n",
+  "<space>fb",
+  ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+  { noremap = true }
+)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

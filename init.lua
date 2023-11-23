@@ -69,67 +69,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
-  'raj77in/vim_colorschemes',
-
-  -- Paste image from clipboard
-  {
-    'dfendr/clipboard-image.nvim',
-    ft = { "markdown" },
-    setup = {
-
-      -- Default configuration for all filetype
-      default = {
-        -- img_dir = {'%:t:r',"images"} ,
-        img_name = function() return os.date('%Y-%m-%d-%H-%M-%S') end, -- Example result: "2021-04-13-10-04-18"
-        img_dir_txt = function()
-          return {"image",vim.fn.expand("%:t:r")}
-        end,
-        img_dir = function()
-          return {"image",vim.fn.expand("%:t:r")}
-        end,
-        affix = "![](%s)",
-
-        -- affix = "<\n  %s\n>" -- Multi lines affix
-      },
-    }
-  },
-  -- Markdown preview
-  --
-  -- install without yarn or npm
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
-  },
-
-  -- File browser
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons"
-    },
-    setup = {
-      extensions = {
-        file_browser = {
-          theme = "ivy",
-          -- disables netrw and use telescope-file-browser in its place
-          hijack_netrw = true,
-          mappings = {
-            ["i"] = {
-              -- your custom insert mode mappings
-            },
-            ["n"] = {
-              -- your custom normal mode mappings
-            },
-          },
-        },
-      },
-    }
-  },
-
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -279,7 +218,8 @@ require('lazy').setup({
     setup = {
       -- A list of parser names, or "all" (the five listed parsers should always be installed)
       -- Check the list athttps://github.com/nvim-treesitter/nvim-treesitter
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown_inline", "python", "bash",  "csv", "diff", "dockerfile", "make", "rst"},
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown_inline", "python", "bash", "csv", "diff",
+        "dockerfile", "make", "rst" },
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
@@ -334,8 +274,33 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.debug',
+
+  'raj77in/vim_colorschemes',
+
+  -- Paste image from clipboard
+  'dfendr/clipboard-image.nvim',
+  -- Markdown preview
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+  },
+
+  -- File browser
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons"
+    },
+  },
+  -- Statusline
+  'nvim-lualine/lualine.nvim',
+
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
@@ -343,11 +308,8 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
-
-
-vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<cmd>PasteImg<CR>')
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -392,6 +354,10 @@ vim.o.termguicolors = true
 
 -- For filename completion
 vim.o.wildmode = 'longest:full,full'
+
+-- Relative Line Number
+vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- [[ Basic Keymaps ]]
 
@@ -465,7 +431,7 @@ local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
     require('telescope.builtin').live_grep({
-      search_dirs = {git_root},
+      search_dirs = { git_root },
     })
   end
 end
@@ -498,7 +464,8 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
+      'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -721,35 +688,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
--- colorscheme
-colormenu_path = vim.fn.expand('$HOME/.config/nvim/lua/util/colorspicker.lua')
-vim.keymap.set("n", "<leader>cs", function()
-  vim.cmd("luafile " .. colormenu_path)
-end)
-
--- require('util.colorspicker')
--- vim.keymap.set("", "<leader>cs", '<cmd>lua colorspicker(require("telescope.themes").get_dropdown({}))<CR>', { noremap = true, silent = false })
---
--- For  file browser
--- To get telescope-file-browser loaded and working with telescope,
--- you need to call load_extension, somewhere after setup function:
-require("telescope").load_extension "file_browser"
-
-vim.api.nvim_set_keymap(
-  "n",
-  "<space>fb",
-  ":Telescope file_browser<CR>",
-  { noremap = true }
-)
-
--- open file_browser with the path of the current buffer
-vim.api.nvim_set_keymap(
-  "n",
-  "<space>fb",
-  ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-  { noremap = true }
-)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

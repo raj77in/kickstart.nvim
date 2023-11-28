@@ -301,6 +301,8 @@ require('lazy').setup({
   -- Statusline
   'nvim-lualine/lualine.nvim',
 
+  -- inline display of images in markdown files (need kitty terminal)
+  'edluffy/hologram.nvim',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping

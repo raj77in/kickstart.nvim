@@ -304,6 +304,10 @@ require('lazy').setup({
   -- inline display of images in markdown files (need kitty terminal)
   'edluffy/hologram.nvim',
 
+  -- Black for python
+  'psf/black',
+  'fisadev/vim-isort',
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -690,6 +694,7 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

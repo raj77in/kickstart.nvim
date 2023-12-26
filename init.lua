@@ -365,6 +365,11 @@ vim.o.wildmode = 'longest:full,full'
 vim.wo.number = true
 vim.wo.relativenumber = true
 
+-- Tab Width
+vim.bo.expandtab = true
+vim.bo.tabstop = 4
+vim.bo.shiftwidth = 4
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -658,7 +663,7 @@ cmp.setup {
     end,
   },
   completion = {
-    completeopt = 'menu,menuone,noinsert'
+    completeopt = 'menu,menuone,noselect'
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),

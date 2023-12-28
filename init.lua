@@ -302,7 +302,8 @@ require('lazy').setup({
   'nvim-lualine/lualine.nvim',
 
   -- inline display of images in markdown files (need kitty terminal)
-  'edluffy/hologram.nvim',
+  -- This causes some un-necessary display issues and is not very useful.
+  -- 'edluffy/hologram.nvim',
 
   -- Black for python
   'psf/black',

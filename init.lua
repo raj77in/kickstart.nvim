@@ -312,6 +312,29 @@ require('lazy').setup({
   'alexghergh/nvim-tmux-navigation',
   'aserowy/tmux.nvim',
 
+  -- Preview markdown code directly in your neovim terminal
+  'ellisonleao/glow.nvim',
+
+  -- Transparent nvim
+  'xiyaowong/transparent.nvim',
+
+  -- Select theme
+  'zaldih/themery.nvim',
+
+  -- Dev icons
+  'nvim-tree/nvim-web-devicons',
+
+  -- Markdown Flow
+  'jakewvincent/mkdnflow.nvim',
+
+  -- markdown
+  -- {
+  --   "tadmccorkle/markdown.nvim",
+  --   ft = "markdown", -- or 'event = "VeryLazy"'
+  --   opts = {
+  --     -- configuration here or empty for defaults
+  --   },
+  -- },
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.

@@ -327,6 +327,9 @@ require('lazy').setup({
   -- Markdown Flow
   'jakewvincent/mkdnflow.nvim',
 
+  -- BASH support
+  'WolfgangMehner/bash-support',
+
   -- markdown
   -- {
   --   "tadmccorkle/markdown.nvim",

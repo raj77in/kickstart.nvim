@@ -351,7 +351,8 @@ require('lazy').setup({
 
   -- Black for python
   'psf/black',
-  'fisadev/vim-isort',
+  -- isort plugin is having issues in most setups, so remove it.
+  -- 'fisadev/vim-isort',
   -- tmux integration
   'alexghergh/nvim-tmux-navigation',
   'aserowy/tmux.nvim',
@@ -382,6 +383,12 @@ require('lazy').setup({
   --     -- configuration here or empty for defaults
   --   },
   -- },
+       -- Markdown distractoin free
+  'junegunn/goyo.vim',
+  'junegunn/limelight.vim',
+  'godlygeek/tabular',
+  'elzr/vim-json',
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.

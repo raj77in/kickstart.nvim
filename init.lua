@@ -104,12 +104,12 @@ require('lazy').setup({
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      "hrsh7th/cmp-buffer",         -- source for text in buffer
-      "hrsh7th/cmp-path",           -- source for file system paths in commands
-      "L3MON4D3/LuaSnip",           -- snippet engine
-      "saadparwaiz1/cmp_luasnip",   -- for lua autocompletion
+      "hrsh7th/cmp-buffer", -- source for text in buffer
+      "hrsh7th/cmp-path", -- source for file system paths in commands
+      "L3MON4D3/LuaSnip", -- snippet engine
+      "saadparwaiz1/cmp_luasnip", -- for lua autocompletion
       "rafamadriz/friendly-snippets", -- useful snippets library
-      "onsails/lspkind.nvim",       -- vs-code like pictograms
+      "onsails/lspkind.nvim", -- vs-code like pictograms
     },
     config = function()
       local cmp = require("cmp")
@@ -134,7 +134,7 @@ require('lazy').setup({
           ["<C-u>"] = cmp.mapping.scroll_docs(-4),
           ["<C-d>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-          ["<C-e>"] = cmp.mapping.abort(),      -- close completion window
+          ["<C-e>"] = cmp.mapping.abort(), -- close completion window
           ["<CR>"] = cmp.mapping.confirm({ select = false }),
         }),
         -- sources for autocompletion
@@ -142,7 +142,7 @@ require('lazy').setup({
           { name = "nvim_lsp" },
           { name = "luasnip" }, -- snippets
           { name = "buffer" }, -- text within current buffer
-          { name = "path" },  -- file system paths
+          { name = "path" }, -- file system paths
         }),
         -- configure lspkind for vs-code like pictograms in completion menu
         formatting = {
@@ -156,7 +156,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -383,11 +383,17 @@ require('lazy').setup({
   --     -- configuration here or empty for defaults
   --   },
   -- },
-       -- Markdown distractoin free
+  -- Markdown distractoin free
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
   'godlygeek/tabular',
   'elzr/vim-json',
+  {
+    'ckipp01/nvim-jenkinsfile-linter',
+    dependencies = {
+      "nvim-lua/plenary.nvim"
+    }
+  },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping

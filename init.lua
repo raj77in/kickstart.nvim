@@ -89,6 +89,13 @@ require('lazy').setup({
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
+      'hrsh7th/nvim-cmp',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/cmp-vsnip',
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -110,6 +117,12 @@ require('lazy').setup({
       "saadparwaiz1/cmp_luasnip", -- for lua autocompletion
       "rafamadriz/friendly-snippets", -- useful snippets library
       "onsails/lspkind.nvim", -- vs-code like pictograms
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/cmp-vsnip'
     },
     config = function()
       local cmp = require("cmp")
@@ -395,14 +408,6 @@ require('lazy').setup({
     }
   },
 
-  -- LSP Servers
-  'neovim/nvim-lsp',
-  {
-    'neovim/nvim-lspconfig',
-  },
-  -- 'neovim/completion-nvim',
-  'bash-lsp/bash-language-server',
-  'artempyanykh/marksman',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping

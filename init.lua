@@ -395,6 +395,15 @@ require('lazy').setup({
     }
   },
 
+  -- LSP Servers
+  'neovim/nvim-lsp',
+  {
+    'neovim/nvim-lspconfig',
+  },
+  -- 'neovim/completion-nvim',
+  'bash-lsp/bash-language-server',
+  'artempyanykh/marksman',
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -486,6 +495,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+require 'lspconfig'.pyright.setup {}
 require('telescope').setup {
   defaults = {
     mappings = {

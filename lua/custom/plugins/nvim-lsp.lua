@@ -1,17 +1,18 @@
 -- init.lua or a separate Lua file
-local nvim_lsp = require('lspconfig')
+
+-- Ensure lspconfig is loaded
+local lspconfig = require('lspconfig')
 
 -- Function to attach completion when setting up lsp
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
   -- Enable completion triggered by <c-x><c-o>
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
-  local opts = { noremap = true, silent = true }
+  local opts = { noremap=true, silent=true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -33,9 +34,11 @@ local on_attach = function(client, bufnr)
 end
 
 -- Enable the following language servers
-local servers = { 'pyright', 'tsserver', 'gopls', 'rust_analyzer' }
+-- local servers = { 'pyright', 'tsserver', 'gopls', 'rust_analyzer' }
+-- Check here : https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+local servers = {'bashls', 'marksman', 'pyright' }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
+  lspconfig[lsp].setup {
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,

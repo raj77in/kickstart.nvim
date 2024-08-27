@@ -429,6 +429,9 @@ vim.o.termguicolors = true
 -- For filename completion
 vim.o.wildmode = 'longest:full,full'
 
+-- Set cursonline
+vim.o.cursorline = true
+
 -- Relative Line Number
 vim.wo.number = true
 vim.wo.relativenumber = true

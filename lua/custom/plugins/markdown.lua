@@ -1,4 +1,6 @@
 require('render-markdown').setup({
+    render_modes = { 'n', 'c' },
+    preset = 'obsidian',
     heading = {
         -- Turn on / off heading icon & background rendering
         enabled = true,

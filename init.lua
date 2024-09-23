@@ -442,6 +442,14 @@ vim.bo.tabstop = 4
 vim.bo.shiftwidth = 4
 vim.bo.textwidth = 120
 
+-- Enable Spell check
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
+
+-- Highlight in RED mis-spelled.
+-- hi SpellBad guibg=#ff2929 ctermbg=224
+
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience

@@ -376,6 +376,51 @@ require('lazy').setup({
     config = function(_, opts) require("markmap").setup(opts) end
   },
 
+  -- Show colors
+  'brenoprata10/nvim-highlight-colors',
+
+  -- Highlight lines with over length.
+  { 'lcheylus/overlength.nvim' },
+
+  -- Similar to MultipleSearch
+  'Mr-LLLLL/interestingwords.nvim',
+
+  -- Control command and cursors
+  {
+    "moyiz/command-and-cursor.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  -- Navigation drop bar
+  {
+    'Bekaboo/dropbar.nvim',
+    -- optional, but required for fuzzy finder support
+    dependencies = {
+      'nvim-telescope/telescope-fzf-native.nvim'
+    }
+  },
+
+  -- Web icons colors
+  'nvim-tree/nvim-web-devicons',
+
+  -- Markdown workflow
+  {
+    'jakewvincent/mkdnflow.nvim',
+    config = function()
+        require('mkdnflow').setup({
+            -- Config goes here; leave blank for defaults
+        })
+    end
+  },
+
+  -- working with a text-based, markdown zettelkasten / wiki and mixing it with a journal, based on telescope.nvim
+  {
+    'renerocksai/telekasten.nvim',
+    dependencies = {'nvim-telescope/telescope.nvim'}
+  },
+
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.

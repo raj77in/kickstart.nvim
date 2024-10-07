@@ -8,7 +8,7 @@ require('mkdnflow').setup({
         foldtext = true,
         links = true,
         lists = true,
-        maps = true,
+        maps = false,
         paths = true,
         tables = true,
         yaml = false,
@@ -19,9 +19,9 @@ require('mkdnflow').setup({
     perspective = {
         priority = 'first',
         fallback = 'current',
-        root_tell = false,
-        nvim_wd_heel = false,
-        update = false
+        root_tell = true,
+        nvim_wd_heel = true,
+        update = true
     },
     wrap = false,
     bib = {
@@ -48,7 +48,7 @@ require('mkdnflow').setup({
         create_on_follow_failure = true
     },
     new_file_template = {
-        use_template = false,
+        use_template = true,
         placeholders = {
             before = {
                 title = "link_title",
@@ -56,7 +56,24 @@ require('mkdnflow').setup({
             },
             after = {}
         },
-        template = "# {{ title }}"
+        template = [[
+# {{ title }}
+Date: {{ date }}
+Filename: {{ filename }}
+]],
+        placeholders = {
+            before = {
+                date = function()
+                    return os.date("%A, %B %d, %Y") -- Wednesday, March 1, 2023
+                end
+            },
+            after = {
+                filename = function()
+                    return vim.api.nvim_buf_get_name(0)
+                end
+            }
+        }
+
     },
     to_do = {
         symbols = {' ', '-', 'X'},
@@ -73,7 +90,7 @@ require('mkdnflow').setup({
         end,
         line_count = true,
         line_percentage = true,
-        word_count = false,
+        word_count = true,
         title_transformer = nil,
         separator = ' · ',
         fill_chars = {
@@ -101,7 +118,7 @@ require('mkdnflow').setup({
     },
     mappings = {
         MkdnEnter = {{'n', 'v'}, '<CR>'},
-        MkdnTab = false,
+        MkdnTab = true,
         MkdnSTab = false,
         MkdnNextLink = {'n', '<Tab>'},
         MkdnPrevLink = {'n', '<S-Tab>'},

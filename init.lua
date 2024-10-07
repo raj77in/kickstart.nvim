@@ -380,7 +380,7 @@ require('lazy').setup({
   'brenoprata10/nvim-highlight-colors',
 
   -- Highlight lines with over length.
-  { 'lcheylus/overlength.nvim' },
+  -- { 'lcheylus/overlength.nvim' },
 
   -- Similar to MultipleSearch
   'Mr-LLLLL/interestingwords.nvim',
@@ -407,6 +407,9 @@ require('lazy').setup({
   -- Markdown workflow
   {
     'jakewvincent/mkdnflow.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim'
+    },
     config = function()
         require('mkdnflow').setup({
             -- Config goes here; leave blank for defaults

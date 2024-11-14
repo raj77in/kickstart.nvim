@@ -3,7 +3,7 @@ return {}
 -- require('overlength').setup({
 --    -- Overlength highlighting enabled by default
 --   enabled = true,
--- 
+--
 --   -- Colors for OverLength highlight group
 --   colors = {
 --     ctermfg = nil,
@@ -11,7 +11,7 @@ return {}
 --     fg = nil,
 --     bg = '#8B0000',
 --   },
--- 
+--
 --   -- Mode to use textwidth local options
 --   -- 0: Don't use textwidth at all, always use config.default_overlength.
 --   -- 1: Use `textwidth, unless it's 0, then use config.default_overlength.
@@ -24,8 +24,8 @@ return {}
 --   grace_length = 5,
 --   -- Highlight only the column or until the end of the line
 --   highlight_to_eol = true,
--- 
+--
 --   -- List of filetypes to disable overlength highlighting
 --   disable_ft = { 'qf', 'help', 'man', 'checkhealth', 'lazy', 'packer', 'NvimTree', 'Telescope', 'WhichKey', "sh", "c" },
 -- })
--- 
+--

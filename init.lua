@@ -422,6 +422,7 @@ require('lazy').setup({
     'renerocksai/telekasten.nvim',
     dependencies = {'nvim-telescope/telescope.nvim'}
   },
+  "fatih/vim-go",
 
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

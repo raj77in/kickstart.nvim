@@ -30,7 +30,7 @@ require('render-markdown').setup({
         -- Minimum width to use for headings when width is 'block'
         min_width = 0,
         -- Determins if a border is added above and below headings
-        border = false,
+        border = true,
         -- Highlight the start of the border using the foreground highlight
         border_prefix = false,
         -- Used above heading for border

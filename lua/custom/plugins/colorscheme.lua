@@ -1,6 +1,6 @@
 -- colorscheme
 colormenu_path = vim.fn.expand('$HOME/.config/nvim/lua/util/colorspicker.lua')
-vim.keymap.set("n", "<leader>cs", function()
+vim.keymap.set("n", "<leader>ccs", function()
   vim.cmd("luafile " .. colormenu_path)
 end)
 

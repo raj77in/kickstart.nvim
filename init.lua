@@ -315,7 +315,7 @@ require('lazy').setup({
   'jakewvincent/mkdnflow.nvim',
 
   -- BASH support
-  -- 'WolfgangMehner/bash-support',
+  'WolfgangMehner/bash-support',
 
   -- markdown
   -- {

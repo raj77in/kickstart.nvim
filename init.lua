@@ -593,6 +593,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
+  'nvim-nio',
   { import = 'custom.plugins' },
 }, {})
 
@@ -651,7 +652,7 @@ vim.wo.relativenumber = true
 vim.bo.expandtab = true
 vim.bo.tabstop = 4
 vim.bo.shiftwidth = 4
-vim.bo.textwidth = 120
+vim.bo.textwidth = 80
 
 -- Enable Spell check
 vim.opt.spelllang = 'en_us'

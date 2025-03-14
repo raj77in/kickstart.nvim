@@ -23,3 +23,4 @@ cmp.setup({
   },
 })
 
+return {}

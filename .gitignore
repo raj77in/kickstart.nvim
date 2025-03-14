@@ -5,3 +5,4 @@ nvim
 lazy-lock.json
 lua/util/colorscheme-persist.lua
 spell/*
+lua/custom/plugins/my.lua

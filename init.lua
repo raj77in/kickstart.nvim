@@ -548,6 +548,10 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   'nvim-nio',
+  {
+    'dense-analysis/ale',
+    dependencies = { "wbthomason/packer.nvim" },
+  },
   { import = 'custom.plugins' },
 }, {})
 

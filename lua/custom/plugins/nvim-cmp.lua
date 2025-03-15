@@ -14,6 +14,12 @@ cmp.setup({
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
+  mapping = cmp.mapping.preset.insert({
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Select first item with Enter
+  }),
+  completion = {
+    completeopt = 'menu,menuone,noinsert' -- Automatically select first item
+  },
   mapping = {
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),

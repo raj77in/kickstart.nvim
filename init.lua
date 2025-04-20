@@ -552,8 +552,10 @@ require('lazy').setup({
     'dense-analysis/ale',
     dependencies = { "wbthomason/packer.nvim" },
   },
-  { import = 'custom.plugins' },
-}, {})
+  'github/copilot.vim',
+  {
+    import = 'custom.plugins' },
+  }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -883,11 +885,11 @@ local servers = {
 
 -- Ensure the servers above are installed
 -- local mason_lspconfig = require 'mason-lspconfig'
--- 
+--
 -- mason_lspconfig.setup {
 --   ensure_installed = vim.tbl_keys(servers),
 -- }
--- 
+--
 -- mason_lspconfig.setup_handlers {
 --   function(server_name)
 --     require('lspconfig')[server_name].setup {

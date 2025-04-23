@@ -466,8 +466,8 @@ require('lazy').setup({
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python", "javascript" },
-        auto_install = false,
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python", "javascript", "markdown" },
+        auto_install = true,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
         incremental_selection = {
           enable = true,
@@ -507,19 +507,19 @@ require('lazy').setup({
       require('telescope').load_extension('fzf')
     end
   },
-  { "jose-elias-alvarez/null-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local null_ls = require("null-ls")
+  -- { "jose-elias-alvarez/null-ls.nvim",
+    -- dependencies = { "nvim-lua/plenary.nvim" },
+    -- config = function()
+      -- local null_ls = require("null-ls")
 
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.diagnostics.ruff,
-          null_ls.builtins.formatting.black,
-        }
-      })
-    end
-  },
+      -- null_ls.setup({
+        -- sources = {
+          -- null_ls.builtins.diagnostics.ruff,
+          -- null_ls.builtins.formatting.black,
+        -- }
+      -- })
+    -- end
+  -- },
   'ellisonleao/glow.nvim',
   'jghauser/follow-md-links.nvim',
   {
@@ -552,6 +552,7 @@ require('lazy').setup({
     'dense-analysis/ale',
     dependencies = { "wbthomason/packer.nvim" },
   },
+  'nvim-tree/nvim-tree.lua',
   'github/copilot.vim',
   {
     import = 'custom.plugins' },
@@ -617,6 +618,17 @@ vim.bo.textwidth = 80
 -- Enable Spell check
 vim.opt.spelllang = 'en_us'
 vim.opt.spell = true
+
+-- Enable netrw plugin
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
+
+-- Start with copilot disabled
+vim.g.copilot_enabled = false
+vim.api.nvim_set_keymap("n", "<leader>cp", ":Copilot toggle<CR>", { noremap = true, silent = true })
 
 -- Highlight in RED mis-spelled.
 -- hi SpellBad guibg=#ff2929 ctermbg=224

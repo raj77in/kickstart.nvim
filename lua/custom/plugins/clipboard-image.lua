@@ -18,6 +18,6 @@ ci.setup({
     -- affix = "<\n  %s\n>" -- Multi lines affix
   }
 })
-vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<cmd>PasteImg<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>cv', '<cmd>PasteImg<CR>')
 
 return {}

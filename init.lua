@@ -508,19 +508,19 @@ require('lazy').setup({
       require('telescope').load_extension('fzf')
     end
   },
-  { "jose-elias-alvarez/null-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local null_ls = require("null-ls")
+  -- { "jose-elias-alvarez/null-ls.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  --   config = function()
+  --     local null_ls = require("null-ls")
 
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.diagnostics.ruff,
-          null_ls.builtins.formatting.black,
-        }
-      })
-    end
-  },
+  --     null_ls.setup({
+  --       sources = {
+  --         null_ls.builtins.diagnostics.ruff,
+  --         null_ls.builtins.formatting.black,
+  --       }
+  --     })
+  --   end
+  -- },
   'ellisonleao/glow.nvim',
   'jghauser/follow-md-links.nvim',
   {

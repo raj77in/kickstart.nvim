@@ -1,0 +1,9 @@
+require("cmp_ai.config"):setup({
+  provider = "Ollama",
+  provider_options = {
+    endpoint = "http://127.0.0.1:11434/api/generate",
+    model = "codellama",
+  },
+  max_lines = 1000,
+})
+return {}

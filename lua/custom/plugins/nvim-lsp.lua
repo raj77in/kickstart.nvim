@@ -1,49 +1,54 @@
--- init.lua or a separate Lua file
-
--- Ensure lspconfig is loaded
-local lspconfig = require('lspconfig')
-
--- Function to attach completion when setting up lsp
+-- LSP keybindings when server attaches
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  local map = function(mode, key, cmd)
+    vim.keymap.set(mode, key, cmd, { buffer = bufnr, silent = true })
+  end
 
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
+  -- enable completion
+  vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<Cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<Cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<Cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<Cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  map("n", "gD", vim.lsp.buf.declaration)
+  map("n", "gd", vim.lsp.buf.definition)
+  map("n", "K", vim.lsp.buf.hover)
+  map("n", "gi", vim.lsp.buf.implementation)
+  map("n", "<C-k>", vim.lsp.buf.signature_help)
+
+  map("n", "<space>wa", vim.lsp.buf.add_workspace_folder)
+  map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder)
+  map("n", "<space>wl", function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end)
+
+  map("n", "<space>D", vim.lsp.buf.type_definition)
+  map("n", "<space>rn", vim.lsp.buf.rename)
+  map("n", "gr", vim.lsp.buf.references)
+
+  map("n", "<space>e", vim.diagnostic.open_float)
+  map("n", "[d", vim.diagnostic.goto_prev)
+  map("n", "]d", vim.diagnostic.goto_next)
+  map("n", "<space>q", vim.diagnostic.setloclist)
+
+  map("n", "<space>f", function()
+    vim.lsp.buf.format({ async = true })
+  end)
+
 end
 
--- Enable the following language servers
--- local servers = { 'pyright', 'tsserver', 'gopls', 'rust_analyzer' }
--- Check here : https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-local servers = {'bashls', 'marksman', 'pyright' }
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
-  }
-end
 
+-- servers to enable
+local servers = {
+  bashls = {},
+  marksman = {},
+  pyright = {},
+}
+
+
+for server, config in pairs(servers) do
+  config.on_attach = on_attach
+  config.flags = { debounce_text_changes = 150 }
+
+  vim.lsp.config(server, config)
+  vim.lsp.enable(server)
+end
 return {}

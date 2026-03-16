@@ -440,19 +440,6 @@ require('lazy').setup({
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim"
     },
-    config = function()
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-      require('mason').setup()
-      local mason_lspconfig = require 'mason-lspconfig'
-      mason_lspconfig.setup {
-        ensure_installed = { "pyright" }
-      }
-      require("lspconfig").pyright.setup {
-        capabilities = capabilities,
-      }
-    end
   },
   { "hrsh7th/nvim-cmp",
     dependencies = {
@@ -662,19 +649,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
--- [[ Configure Telescope ]]
--- See `:help telescope` and `:help telescope.setup()`
-require 'lspconfig'.pyright.setup {}
-require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
-      },
-    },
-  },
-}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -914,6 +888,11 @@ local servers = {
 --   end,
 -- }
 
+
+vim.g.mkdp_markdown_css = os.getenv("HOME") .. '/.config/nvim/markdown-preview/custom.css'
+vim.g.mkdp_auto_start = 0
+vim.g.mkdp_open_to_the_world = 0
+vim.g.mkdp_browser = "firefox"
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`

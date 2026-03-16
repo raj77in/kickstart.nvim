@@ -5,6 +5,10 @@
 local cmp = require('cmp')
 
 cmp.setup({
+  completion = {
+    autocomplete = false,
+    completeopt = 'menu,menuone,noinsert'
+  },
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
@@ -18,16 +22,16 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Select first item with Enter
   }),
   completion = {
+    autocomplete = false,
     completeopt = 'menu,menuone,noinsert' -- Automatically select first item
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
 
-    -- Use Tab and Shift-Tab to navigate through the completion menu
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -43,7 +47,7 @@ cmp.setup({
         fallback()
       end
     end, { 'i', 's' }),
-  },
+  }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' }, -- For vsnip users.

@@ -198,66 +198,39 @@ require('lazy').setup({
   },
 
   {
-    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-      'ikatyang/tree-sitter-markdown',
-    },
-    setup = {
-      -- A list of parser names, or "all" (the five listed parsers should always be installed)
-      -- Check the list athttps://github.com/nvim-treesitter/nvim-treesitter
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown_inline", "python", "bash", "csv", "diff",
-        "markdown", "dockerfile", "make", "rst" },
-
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
-
-      -- List of parsers to ignore installing (or "all")
-      ignore_install = { "javascript" },
-
-      -- Indentation
-      indent = {
-        enable = true
-      },
-
-      --Tree-sitter based folding. (Technically not a module because it's per windows and not per buffer.)
-
-
-
-      ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-      -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-      highlight = {
-        enable = true,
-
-        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-        -- the name of the parser)
-        -- list of language that will be disabled
-        -- disable = { "c", "rust" },
-        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-        disable = function(lang, buf)
-          local max_filesize = 100 * 1024 -- 100 KB
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
-          end
-        end,
-        --
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false
-      },
-    },
-
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
+
+    config = function()
+      local languages = {
+        'c',
+        'cpp',
+        'go',
+        'lua',
+        'python',
+        'rust',
+        'tsx',
+        'javascript',
+        'typescript',
+        'vimdoc',
+        'vim',
+        'bash',
+        'markdown',
+      }
+
+      require('nvim-treesitter').setup()
+
+      require('nvim-treesitter').install(languages)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = languages,
+        callback = function()
+          vim.treesitter.start()
+        end,
+      })
+    end,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -330,8 +303,8 @@ require('lazy').setup({
   --   },
   -- },
   -- Markdown distractoin free
-  'junegunn/goyo.vim',
-  'junegunn/limelight.vim',
+  -- 'junegunn/goyo.vim',
+  -- 'junegunn/limelight.vim',
   'godlygeek/tabular',
   'elzr/vim-json',
   {
@@ -345,9 +318,9 @@ require('lazy').setup({
   {
     'MeanderingProgrammer/render-markdown.nvim',
     opts = {},
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
   },
 
   'chentoast/marks.nvim',
@@ -448,27 +421,6 @@ require('lazy').setup({
       "saadparwaiz1/cmp_luasnip"
     },
   },
-  { "nvim-treesitter/nvim-treesitter", version = false,
-    build = function()
-      require("nvim-treesitter.install").update({ with_sync = true })
-    end,
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python", "javascript", "markdown" },
-        auto_install = true,
-        highlight = { enable = true, additional_vim_regex_highlighting = false },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-n>",
-            node_incremental = "<C-n>",
-            scope_incremental = "<C-s>",
-            node_decremental = "<C-m>",
-          }
-        }
-      })
-    end
-  },
   { "nvim-telescope/telescope.nvim", cmd = "Telescope", version = false,
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
@@ -545,6 +497,21 @@ require('lazy').setup({
   {
     import = 'custom.plugins' },
 }, {})
+
+
+-- ALE
+vim.g.ale_linters = {
+  markdown = { 'markdownlint_cli2' },
+}
+
+-- vim.g.ale_fixers = {
+  -- markdown = { 'markdownlint' },
+-- }
+
+vim.g.ale_fix_on_save = 0
+vim.g.ale_lint_on_text_changed = 'always'
+vim.g.ale_lint_on_insert_leave = 1
+vim.g.ale_lint_on_enter = 1
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -709,74 +676,6 @@ vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by 
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
--- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
-vim.defer_fn(function()
-  require('nvim-treesitter.configs').setup {
-    -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'markdown' },
-
-    -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = true,
-
-    highlight = { enable = true },
-    indent = { enable = true },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<c-space>',
-        node_incremental = '<c-space>',
-        scope_incremental = '<c-s>',
-        node_decremental = '<M-space>',
-      }
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-        keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
-          ['aa'] = '@parameter.outer',
-          ['ia'] = '@parameter.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer',
-          [']['] = '@class.outer',
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer',
-          ['[['] = '@class.outer',
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
-    },
-  }
-end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.

@@ -305,6 +305,15 @@ require('lazy').setup({
   -- Markdown distractoin free
   -- 'junegunn/goyo.vim',
   -- 'junegunn/limelight.vim',
+  --
+  {
+    "hedyhli/outline.nvim",
+    cmd = { "Outline", "OutlineOpen" },
+    keys = {
+      { "<leader>o", "<cmd>Outline<cr>", desc = "Toggle outline" },
+    },
+    opts = {},
+  },
   'godlygeek/tabular',
   'elzr/vim-json',
   {

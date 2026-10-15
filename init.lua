@@ -512,6 +512,7 @@ require('lazy').setup({
 vim.g.ale_linters = {
   markdown = { 'markdownlint_cli2' },
 }
+vim.g.ale_markdown_markdownlint_cli2_options = '--config ~/.config/markdownlint-cli2.jsonc'
 
 -- vim.g.ale_fixers = {
   -- markdown = { 'markdownlint' },

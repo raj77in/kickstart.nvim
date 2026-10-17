@@ -92,7 +92,7 @@ require('lazy').setup({
   'L3MON4D3/LuaSnip',
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -203,8 +203,12 @@ require('lazy').setup({
     lazy = false,
     build = ':TSUpdate',
 
+
     config = function()
+      local ts = require('nvim-treesitter')
+
       local languages = {
+        'bash',
         'c',
         'cpp',
         'go',
@@ -216,16 +220,31 @@ require('lazy').setup({
         'typescript',
         'vimdoc',
         'vim',
-        'bash',
         'markdown',
       }
 
-      require('nvim-treesitter').setup()
+      ts.setup()
 
-      require('nvim-treesitter').install(languages)
+      -- Request parser installation.
+      ts.install(languages)
 
+      -- Start Treesitter for filetypes that have a usable parser.
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = languages,
+        pattern = {
+          'python',
+          'lua',
+          'bash',
+          'c',
+          'cpp',
+          'go',
+          'rust',
+          'javascript',
+          'typescript',
+          'typescriptreact',
+          'markdown',
+          'vim',
+          'vimdoc',
+        },
         callback = function()
           vim.treesitter.start()
         end,
@@ -356,8 +375,8 @@ require('lazy').setup({
     cmd = { "MarkmapOpen", "MarkmapSave", "MarkmapWatch", "MarkmapWatchStop" },
     opts = {
       html_output = "/tmp/markmap.html", -- (default) Setting a empty string "" here means: [Current buffer path].html
-      hide_toolbar = false, -- (default)
-      grace_period = 3600000 -- (default) Stops markmap watch after 60 minutes. Set it to 0 to disable the grace_period.
+      hide_toolbar = false,              -- (default)
+      grace_period = 3600000             -- (default) Stops markmap watch after 60 minutes. Set it to 0 to disable the grace_period.
     },
     config = function(_, opts) require("markmap").setup(opts) end
   },
@@ -406,38 +425,45 @@ require('lazy').setup({
   -- working with a text-based, markdown zettelkasten / wiki and mixing it with a journal, based on telescope.nvim
   {
     'renerocksai/telekasten.nvim',
-    dependencies = {'nvim-telescope/telescope.nvim'}
+    dependencies = { 'nvim-telescope/telescope.nvim' }
   },
   "fatih/vim-go",
 
   "echasnovski/mini.icons",
   -- all plugins go here
-  { "L3MON4D3/LuaSnip", event = "VeryLazy",
+  {
+    "L3MON4D3/LuaSnip",
+    event = "VeryLazy",
     config = function()
-      require("luasnip.loaders.from_lua").load({paths = "./snippets"})
+      require("luasnip.loaders.from_lua").load({ paths = "./snippets" })
     end
   },
-  { "neovim/nvim-lspconfig",
+  {
+    "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim"
     },
   },
-  { "hrsh7th/nvim-cmp",
+  {
+    "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip"
     },
   },
-  { "nvim-telescope/telescope.nvim", cmd = "Telescope", version = false,
+  {
+    "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    version = false,
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
-      { "<leader>sf", "<cmd>Telescope git_files<cr>", desc = "Find Files (root dir)" },
-      { "<leader><space>", "<cmd>Telescope buffers<cr>", desc = "Find Buffers" },
-      { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Search Project" },
-      { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Search Document Symbols" },
-      { "<leader>sw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Search Workspace Symbols" },
+      { "<leader>sf",      "<cmd>Telescope git_files<cr>",                     desc = "Find Files (root dir)" },
+      { "<leader><space>", "<cmd>Telescope buffers<cr>",                       desc = "Find Buffers" },
+      { "<leader>sg",      "<cmd>Telescope live_grep<cr>",                     desc = "Search Project" },
+      { "<leader>ss",      "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Search Document Symbols" },
+      { "<leader>sw",      "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Search Workspace Symbols" },
     },
     opts = {
       extensions = {
@@ -450,7 +476,8 @@ require('lazy').setup({
       }
     }
   },
-  { "nvim-telescope/telescope-fzf-native.nvim",
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
     config = function()
       require('telescope').load_extension('fzf')
@@ -504,6 +531,91 @@ require('lazy').setup({
   'nvim-tree/nvim-tree.lua',
   'github/copilot.vim',
   {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+    },
+    config = function()
+      local cmp = require('cmp')
+      local luasnip = require('luasnip')
+
+      luasnip.config.setup {}
+
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+
+        completion = {
+          completeopt = 'menu,menuone,noinsert',
+        },
+
+        mapping = cmp.mapping.preset.insert {
+          -- Select the next completion item with Tab.
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              -- Popup is open: select the next item.
+              cmp.select_next_item()
+            else
+              -- Popup is closed: open completion.
+              cmp.complete()
+            end
+          end, { 'i', 's' }),
+
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              -- Popup is open: select the previous item.
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+
+          -- Accept the selected completion.
+          ['<CR>'] = cmp.mapping.confirm {
+            select = true,
+          },
+
+          -- Manually open completion.
+          ['<C-Space>'] = cmp.mapping.complete(),
+
+          -- Close completion.
+          ['<C-e>'] = cmp.mapping.abort(),
+
+          -- Scroll completion documentation.
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        },
+
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'path' },
+        }, {
+          { name = 'buffer' },
+        }),
+      }
+    end,
+  },
+  {
+    'mason-org/mason.nvim',
+    opts = {},
+  },
+  {
+    'mason-org/mason-lspconfig.nvim',
+    dependencies = {
+      'mason-org/mason.nvim',
+      'neovim/nvim-lspconfig',
+    },
+  },
+  {
     import = 'custom.plugins' },
 }, {})
 
@@ -515,7 +627,7 @@ vim.g.ale_linters = {
 vim.g.ale_markdown_markdownlint_cli2_options = '--config ~/.config/markdownlint-cli2.jsonc'
 
 -- vim.g.ale_fixers = {
-  -- markdown = { 'markdownlint' },
+-- markdown = { 'markdownlint' },
 -- }
 
 vim.g.ale_fix_on_save = 0
@@ -765,12 +877,37 @@ local servers = {
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
   lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
+    root_markers = {
+      '.luarc.json',
+      '.luarc.jsonc',
+      '.luacheckrc',
+      '.stylua.toml',
+      'stylua.toml',
+      'selene.toml',
+      'selene.yml',
+      '.git',
+    },
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+      },
     },
   },
 }
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+for name, server in pairs(servers) do
+  server.capabilities = vim.tbl_deep_extend(
+    'force',
+    capabilities,
+    server.capabilities or {}
+  )
+
+  vim.lsp.config(name, server)
+  vim.lsp.enable(name)
+end
 
 -- Setup neovim lua configuration
 -- require('neodev').setup()

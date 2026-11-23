@@ -423,10 +423,10 @@ require('lazy').setup({
   },
 
   -- working with a text-based, markdown zettelkasten / wiki and mixing it with a journal, based on telescope.nvim
-  {
-    'renerocksai/telekasten.nvim',
-    dependencies = { 'nvim-telescope/telescope.nvim' }
-  },
+  -- {
+  -- 'renerocksai/telekasten.nvim',
+  -- dependencies = { 'nvim-telescope/telescope.nvim' }
+  -- },
   "fatih/vim-go",
 
   "echasnovski/mini.icons",
@@ -622,7 +622,7 @@ require('lazy').setup({
 
 -- ALE
 vim.g.ale_linters = {
-  markdown = { 'markdownlint_cli2' },
+  markdown = { 'markdownlint-cli2' },
 }
 vim.g.ale_markdown_markdownlint_cli2_options = '--config ~/.config/markdownlint-cli2.jsonc'
 
